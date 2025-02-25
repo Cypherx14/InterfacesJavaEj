@@ -3,11 +3,9 @@ package org.alexc.poointerfaces.repositorio;
 import org.alexc.poointerfaces.modelo.Cliente;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class ClienteListRepositorio implements CrudRepositorio,
-        OrdenableRepositorio, PaginableRepositorio{
+public class ClienteListRepositorio implements OrdenablePaginableCrudRepositorio{
 
     private List<Cliente> datasource;
 
@@ -89,9 +87,9 @@ public class ClienteListRepositorio implements CrudRepositorio,
         listaOrdenada.sort((a, b) -> {
             int resultado = 0;
             if(dir == Direccion.ASC){
-                resultado = this.ordenar(campo,a,b);
+                resultado = ordenar(campo,a,b);
             }else if(dir == Direccion.DESC){
-                resultado = this.ordenar(campo,b,a);
+                resultado = ordenar(campo,b,a);
             }
             return resultado;
         });
@@ -106,7 +104,7 @@ public class ClienteListRepositorio implements CrudRepositorio,
 
 
     //metodos de la clase
-    private int ordenar(String campo,Cliente a, Cliente b){
+    public static int ordenar(String campo,Cliente a, Cliente b){
         int resultadoComparador =0;
         switch (campo){
             case "id" ->
@@ -117,5 +115,10 @@ public class ClienteListRepositorio implements CrudRepositorio,
                     resultadoComparador = a.getApellido().compareTo(b.getApellido());
         }
         return resultadoComparador;
+    }
+
+    @Override
+    public int total() {
+        return this.datasource.size();
     }
 }
